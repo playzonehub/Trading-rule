@@ -1,0 +1,939 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#080d19">
+<title>ETH PULSE | Smart Trading</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='25' fill='%23080d19'/%3E%3Cpath d='M50 10 25 52 50 66 75 52Z' fill='%236b8cff'/%3E%3Cpath d='M25 60 50 90 75 60 50 75Z' fill='%2300d6a0'/%3E%3C/svg%3E">
+<style>
+:root{
+ --bg:#080d19;
+ --panel:#111a2b;
+ --panel2:#18243a;
+ --line:#293851;
+ --text:#f4f7ff;
+ --muted:#91a0b8;
+ --blue:#668cff;
+ --green:#00d6a0;
+ --red:#ff5c76;
+ --yellow:#ffc96a;
+}
+*{box-sizing:border-box}
+body{
+ margin:0;background:var(--bg);color:var(--text);
+ font-family:Arial,Helvetica,sans-serif;
+ padding-bottom:90px;
+}
+button,input,select{font:inherit}
+button{cursor:pointer;border:0}
+.app{max-width:900px;margin:auto;padding:16px}
+header{
+ display:flex;align-items:center;justify-content:space-between;
+ margin-bottom:20px;
+}
+.brand{display:flex;align-items:center;gap:11px}
+.logo{
+ width:44px;height:44px;border-radius:15px;
+ background:linear-gradient(135deg,#668cff,#00d6a0);
+ display:grid;place-items:center;color:#07111c;
+ font-size:18px;font-weight:900;
+ box-shadow:0 5px 20px #668cff35;
+}
+.brand h1{font-size:19px;margin:0;letter-spacing:1px}
+.brand small{font-size:10px;color:var(--muted)}
+.status{
+ padding:8px 11px;border-radius:30px;
+ background:#10352e;color:var(--green);font-size:10px;
+}
+.card{
+ background:var(--panel);border:1px solid var(--line);
+ border-radius:19px;padding:17px;margin-bottom:14px;
+}
+.section-title{
+ font-size:13px;font-weight:bold;
+ letter-spacing:.5px;margin:0 0 14px;
+}
+.muted{color:var(--muted);font-size:12px}
+.strategy-card{
+ background:linear-gradient(135deg,#172747,#112c30);
+ border:1px solid #34517c;
+}
+.strategy-name{font-size:16px;font-weight:bold;line-height:1.6}
+.strategy-label{
+ font-size:10px;color:#9bb6ff;letter-spacing:1px;
+ margin-bottom:8px;
+}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.stat{
+ background:var(--panel2);padding:15px;border-radius:14px;
+ border:1px solid #253650;
+}
+.stat small{display:block;color:var(--muted);font-size:10px;margin-bottom:9px}
+.stat strong{font-size:22px}
+.positive{color:var(--green)}
+.negative{color:var(--red)}
+.yellow{color:var(--yellow)}
+label{
+ display:block;font-size:12px;color:var(--muted);
+ margin:13px 0 7px;
+}
+input,select{
+ width:100%;padding:13px 12px;
+ border:1px solid var(--line);border-radius:11px;
+ background:#0a1322;color:var(--text);outline:none;
+}
+input:focus,select:focus{border-color:var(--blue)}
+.row{display:flex;gap:10px}
+.row>*{flex:1;min-width:0}
+.btn{
+ padding:13px 15px;border-radius:11px;
+ color:white;font-weight:bold;background:var(--blue);
+ transition:.2s;
+}
+.btn:active{transform:scale(.97)}
+.btn-green{background:#087e62}
+.btn-red{background:#a8324b}
+.btn-dark{background:#27364f}
+.btn-full{width:100%;margin-top:12px}
+.page{display:none}
+.page.active{display:block}
+.trade-box{
+ border:1px solid #087e62;
+ background:linear-gradient(135deg,#102b2b,#111a2b);
+}
+.trade-grid{
+ display:grid;grid-template-columns:repeat(2,1fr);
+ gap:9px;margin-top:13px;
+}
+.trade-grid div{
+ background:#0a1422;padding:12px;border-radius:11px;
+}
+.trade-grid small{
+ display:block;color:var(--muted);font-size:10px;margin-bottom:6px;
+}
+.trade-grid strong{font-size:14px}
+.trade-actions{display:flex;gap:9px;margin-top:13px}
+.trade-actions button{flex:1}
+.empty{
+ padding:24px 10px;text-align:center;
+ color:var(--muted);font-size:13px;
+}
+.tabs{
+ position:fixed;bottom:0;left:0;right:0;z-index:10;
+ display:flex;justify-content:center;
+ background:#101a2b;border-top:1px solid var(--line);
+ padding:9px 5px calc(9px + env(safe-area-inset-bottom));
+}
+.tabs button{
+ flex:1;max-width:180px;background:none;
+ color:var(--muted);font-size:11px;padding:6px;
+}
+.tabs button span{display:block;font-size:20px;margin-bottom:4px}
+.tabs button.active{color:#8baaff}
+.history-item{
+ padding:14px 0;border-bottom:1px solid var(--line);
+}
+.history-item:last-child{border:0}
+.history-top{display:flex;justify-content:space-between;gap:8px}
+.pill{
+ display:inline-block;padding:5px 9px;border-radius:30px;
+ font-size:10px;background:#263650;
+}
+.notice{
+ color:var(--muted);font-size:11px;line-height:1.6;margin-top:12px;
+}
+.footer{text-align:center;color:#65738a;font-size:10px;padding:15px}
+
+/* MODERN POPUP */
+.overlay{
+ display:none;position:fixed;inset:0;z-index:50;
+ background:rgba(2,7,17,.82);
+ backdrop-filter:blur(9px);
+ -webkit-backdrop-filter:blur(9px);
+ align-items:center;justify-content:center;
+ padding:18px;
+}
+.overlay.show{display:flex}
+.modal{
+ width:100%;max-width:390px;
+ background:linear-gradient(155deg,#1b2a45,#101a2c 70%);
+ border:1px solid #40567a;border-radius:25px;
+ padding:24px 20px 20px;text-align:center;
+ box-shadow:0 20px 80px #000b;
+ animation:popupIn .35s cubic-bezier(.2,.8,.2,1);
+ position:relative;overflow:hidden;
+}
+.modal:before{
+ content:"";position:absolute;top:0;left:0;right:0;
+ height:3px;background:linear-gradient(90deg,#668cff,#00d6a0);
+}
+@keyframes popupIn{
+ from{opacity:0;transform:translateY(25px) scale(.94)}
+ to{opacity:1;transform:translateY(0) scale(1)}
+}
+.popup-icon{
+ width:67px;height:67px;margin:0 auto 14px;
+ border-radius:22px;background:#153b35;
+ display:grid;place-items:center;font-size:30px;
+ box-shadow:0 0 30px #00d6a025;
+ animation:glow 2s infinite;
+}
+@keyframes glow{
+ 50%{box-shadow:0 0 35px #00d6a055}
+}
+.popup-tag{
+ display:inline-block;background:#103c32;color:var(--green);
+ font-size:10px;font-weight:bold;letter-spacing:1px;
+ padding:7px 12px;border-radius:30px;margin-bottom:10px;
+}
+.modal h2{font-size:21px;margin:5px 0 8px}
+.modal p{color:var(--muted);font-size:12px;line-height:1.6}
+.popup-details{
+ background:#0b1525;border:1px solid #273951;
+ border-radius:14px;padding:13px;margin:16px 0;
+ display:grid;grid-template-columns:repeat(2,1fr);gap:13px;
+ text-align:left;
+}
+.popup-details small{
+ display:block;color:var(--muted);font-size:10px;margin-bottom:5px;
+}
+.popup-details strong{font-size:14px}
+.modal button{width:100%;margin-top:9px}
+.close-x{
+ position:absolute;right:15px;top:13px;
+ background:#28364b;color:#bdc8dc;
+ width:29px;height:29px;border-radius:50%;
+}
+.toast{
+ position:fixed;top:15px;left:50%;transform:translateX(-50%);
+ z-index:100;background:#172a43;border:1px solid #40577a;
+ padding:12px 18px;border-radius:12px;font-size:12px;
+ width:max-content;max-width:90%;display:none;
+ box-shadow:0 8px 30px #0008;
+}
+.toast.show{display:block;animation:popupIn .2s}
+@media(min-width:650px){
+ .grid{grid-template-columns:repeat(4,1fr)}
+}
+</style>
+</head>
+
+<body>
+<div class="app">
+
+<header>
+ <div class="brand">
+  <div class="logo">EP</div>
+  <div>
+   <h1>ETH PULSE</h1>
+   <small>SMART TRADING JOURNAL</small>
+  </div>
+ </div>
+ <div class="status">● MANUAL MODE</div>
+</header>
+
+<!-- HOME -->
+<section class="page active" id="home">
+
+ <div class="card strategy-card">
+  <div class="strategy-label">YOUR TRADING STRATEGY</div>
+  <div class="strategy-name">
+   9 EMA + 15 EMA Crossover with Pullback Strategy
+  </div>
+ </div>
+
+ <div class="grid">
+  <div class="stat">
+   <small>TRADES TODAY</small>
+   <strong id="tradesCount">0 / 3</strong>
+  </div>
+  <div class="stat">
+   <small>WINS</small>
+   <strong class="positive" id="winsCount">0</strong>
+  </div>
+  <div class="stat">
+   <small>LOSSES</small>
+   <strong class="negative" id="lossCount">0</strong>
+  </div>
+  <div class="stat">
+   <small>NET POINTS</small>
+   <strong id="netPoints">0</strong>
+  </div>
+ </div>
+
+ <div class="card" style="margin-top:14px">
+  <div class="section-title">DAILY TRADING RULES</div>
+  <div class="trade-grid">
+   <div><small>DAILY TARGET</small><strong class="positive">+20 to +30</strong></div>
+   <div><small>MAXIMUM LOSS</small><strong class="negative">-20 points</strong></div>
+   <div><small>MAXIMUM TRADES</small><strong>3 trades</strong></div>
+   <div><small>TRADE 1</small><strong>SL 5 / TP 10</strong></div>
+  </div>
+  <div class="notice">
+   Trade 2: After a win, SL 10 / TP 15. After a loss, SL 5 / TP 15.
+   Trade 3 follows the previous trade result.
+  </div>
+ </div>
+
+ <div class="card">
+  <div class="section-title">ACTIVE TRADE</div>
+  <div id="activeTradeBox" class="empty">No active trade</div>
+ </div>
+
+ <div class="card">
+  <div class="section-title">START NEW TRADE</div>
+
+  <div class="row">
+   <div>
+    <label>Direction</label>
+    <select id="direction">
+     <option value="LONG">LONG / BUY</option>
+     <option value="SHORT">SHORT / SELL</option>
+    </select>
+   </div>
+   <div>
+    <label>Entry Price</label>
+    <input id="entry" type="number" step="any" placeholder="Entry price">
+   </div>
+  </div>
+
+  <div class="row">
+   <div>
+    <label>Stop Loss (points)</label>
+    <input id="slPoints" type="number" value="5" min="0.01" step="any">
+   </div>
+   <div>
+    <label>Take Profit (points)</label>
+    <input id="tpPoints" type="number" value="10" min="0.01" step="any">
+   </div>
+  </div>
+
+  <label>Strategy</label>
+  <select id="setup">
+   <option>9 EMA + 15 EMA Crossover with Pullback Strategy</option>
+   <option>Manual Setup</option>
+  </select>
+
+  <div class="trade-grid">
+   <div><small>CALCULATED SL PRICE</small><strong id="previewSL">--</strong></div>
+   <div><small>CALCULATED TP PRICE</small><strong id="previewTP">--</strong></div>
+  </div>
+
+  <button class="btn btn-green btn-full" id="startButton" onclick="startTrade()">
+   + START TRADE
+  </button>
+  <div class="notice">
+   Check your entry, SL and TP before starting. ETH PULSE does not place orders on your exchange.
+  </div>
+ </div>
+</section>
+
+<!-- JOURNAL -->
+<section class="page" id="journal">
+ <div class="card">
+  <div class="section-title">TRADE JOURNAL</div>
+  <div class="grid">
+   <div class="stat"><small>TOTAL TRADES</small><strong id="journalTotal">0</strong></div>
+   <div class="stat"><small>WIN RATE</small><strong id="winRate">0%</strong></div>
+  </div>
+  <div id="historyList" class="empty">No completed trades yet</div>
+  <button class="btn btn-dark btn-full" onclick="exportCSV()">↓ EXPORT CSV</button>
+  <button class="btn btn-red btn-full" onclick="clearHistory()">CLEAR JOURNAL</button>
+ </div>
+</section>
+
+<!-- SETTINGS -->
+<section class="page" id="settings">
+ <div class="card">
+  <div class="section-title">POPUP & NOTIFICATION SETTINGS</div>
+  <label>Reminder Interval</label>
+  <select id="reminderInterval" onchange="saveSettings()">
+   <option value="1">Every 1 minute</option>
+   <option value="2">Every 2 minutes</option>
+   <option value="5">Every 5 minutes</option>
+  </select>
+  <button class="btn btn-dark btn-full" onclick="enableNotifications()">
+   ENABLE BROWSER NOTIFICATIONS
+  </button>
+  <div class="notice">
+   Popup reminders continue while the trade is active and this website remains open.
+   Browser notifications need permission. GitHub Pages cannot guarantee reminders when the browser is completely closed.
+  </div>
+ </div>
+
+ <div class="card">
+  <div class="section-title">APP SETTINGS</div>
+  <button class="btn btn-dark btn-full" onclick="resetDaily()">
+   RESET DAILY STATISTICS
+  </button>
+  <button class="btn btn-red btn-full" onclick="resetApp()">
+   RESET ALL APP DATA
+  </button>
+ </div>
+
+ <div class="footer">ETH PULSE · Version 2.0</div>
+</section>
+
+</div>
+
+<nav class="tabs">
+ <button class="active" onclick="showPage('home',this)">
+  <span>⌂</span>Home
+ </button>
+ <button onclick="showPage('journal',this)">
+  <span>▤</span>Journal
+ </button>
+ <button onclick="showPage('settings',this)">
+  <span>⚙</span>Settings
+ </button>
+</nav>
+
+<!-- MODERN ACTIVE TRADE POPUP -->
+<div class="overlay" id="reminderOverlay">
+ <div class="modal">
+  <button class="close-x" onclick="dismissPopup()">×</button>
+  <div class="popup-icon">🔔</div>
+  <div class="popup-tag" id="popupTag">TRADE ACTIVE</div>
+  <h2 id="popupTitle">Your trade is active</h2>
+  <p id="popupMessage">Please check your active trading position.</p>
+
+  <div class="popup-details">
+   <div><small>DIRECTION</small><strong id="popupDirection">LONG</strong></div>
+   <div><small>ENTRY PRICE</small><strong id="popupEntry">--</strong></div>
+   <div><small>STOP LOSS</small><strong id="popupSL">--</strong></div>
+   <div><small>TAKE PROFIT</small><strong id="popupTP">--</strong></div>
+  </div>
+
+  <button class="btn btn-green" onclick="dismissPopup()">
+   ✓ I CHECKED MY TRADE
+  </button>
+  <button class="btn btn-red" onclick="openCloseFromPopup()">
+   CLOSE THIS TRADE
+  </button>
+ </div>
+</div>
+
+<!-- CLOSE TRADE POPUP -->
+<div class="overlay" id="closeOverlay">
+ <div class="modal">
+  <button class="close-x" onclick="hideCloseModal()">×</button>
+  <div class="popup-icon" style="background:#2b2545">📊</div>
+  <h2>Close Trade</h2>
+  <p>Enter the actual exit price to calculate your trade result.</p>
+
+  <label style="text-align:left">Exit Price</label>
+  <input type="number" id="exitPrice" step="any" placeholder="Enter exit price">
+
+  <div class="trade-grid">
+   <div><small>EXPECTED RESULT</small><strong id="closePreview">--</strong></div>
+   <div><small>POINTS</small><strong id="closePoints">--</strong></div>
+  </div>
+
+  <button class="btn btn-green" onclick="confirmCloseTrade()">CONFIRM CLOSE</button>
+  <button class="btn btn-dark" onclick="hideCloseModal()">CANCEL</button>
+ </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const STORAGE_KEY = "ethPulseAppV3";
+
+function todayKey(){
+ return new Date().toLocaleDateString("en-CA");
+}
+
+function defaultData(){
+ return {
+  date:todayKey(),
+  today:[],
+  history:[],
+  active:null,
+  settings:{reminderInterval:1}
+ };
+}
+
+function loadData(){
+ try{
+  const saved=JSON.parse(localStorage.getItem(STORAGE_KEY));
+  return saved?{...defaultData(),...saved,
+   settings:{...defaultData().settings,...(saved.settings||{})}
+  }:defaultData();
+ }catch(e){return defaultData()}
+}
+
+let data=loadData();
+let reminderTimer=null;
+let popupTimer=null;
+let lastPopupTime=0;
+let popupDismissed=false;
+
+function save(){
+ localStorage.setItem(STORAGE_KEY,JSON.stringify(data));
+}
+
+function toast(message){
+ const el=document.getElementById("toast");
+ el.textContent=message;
+ el.classList.add("show");
+ setTimeout(()=>el.classList.remove("show"),2600);
+}
+
+function showPage(page,button){
+ document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+ document.getElementById(page).classList.add("active");
+ document.querySelectorAll(".tabs button").forEach(b=>b.classList.remove("active"));
+ button.classList.add("active");
+}
+
+function dailyResetCheck(){
+ if(data.date!==todayKey()){
+  data.date=todayKey();
+  data.today=[];
+  save();
+ }
+}
+
+function getPoints(){
+ return data.today.reduce((sum,t)=>sum+(Number(t.points)||0),0);
+}
+
+function getWins(){
+ return data.today.filter(t=>t.result==="WIN").length;
+}
+
+function getLosses(){
+ return data.today.filter(t=>t.result==="LOSS").length;
+}
+
+function getRuleForNextTrade(){
+ const count=data.today.length;
+ if(count===0)return {sl:5,tp:10};
+
+ const previous=data.today[data.today.length-1];
+ if(previous.result==="WIN")return {sl:10,tp:15};
+ if(previous.result==="LOSS")return {sl:5,tp:15};
+
+ // Break-even follows the previous trade's rule.
+ return previous.rule || {sl:5,tp:15};
+}
+
+function updateSuggestedRules(){
+ const rule=getRuleForNextTrade();
+ document.getElementById("slPoints").value=rule.sl;
+ document.getElementById("tpPoints").value=rule.tp;
+ updatePreview();
+}
+
+function updatePreview(){
+ const entry=Number(document.getElementById("entry").value);
+ const sl=Number(document.getElementById("slPoints").value);
+ const tp=Number(document.getElementById("tpPoints").value);
+ const direction=document.getElementById("direction").value;
+
+ let slPrice="--",tpPrice="--";
+
+ if(entry>0&&sl>0&&tp>0){
+  slPrice=(direction==="LONG"?entry-sl:entry+sl).toFixed(2);
+  tpPrice=(direction==="LONG"?entry+tp:entry-tp).toFixed(2);
+ }
+ document.getElementById("previewSL").textContent=slPrice;
+ document.getElementById("previewTP").textContent=tpPrice;
+}
+
+["entry","slPoints","tpPoints","direction"].forEach(id=>{
+ document.getElementById(id).addEventListener("input",updatePreview);
+ document.getElementById(id).addEventListener("change",updatePreview);
+});
+
+function startTrade(){
+ dailyResetCheck();
+
+ if(data.active){
+  toast("You already have an active trade.");
+  return;
+ }
+
+ if(data.today.length>=3){
+  toast("Daily maximum of 3 trades reached.");
+  return;
+ }
+
+ const entry=Number(document.getElementById("entry").value);
+ const sl=Number(document.getElementById("slPoints").value);
+ const tp=Number(document.getElementById("tpPoints").value);
+ const direction=document.getElementById("direction").value;
+
+ if(!entry||entry<=0||!sl||sl<=0||!tp||tp<=0){
+  toast("Enter valid entry, SL and TP.");
+  return;
+ }
+
+ const currentPoints=getPoints();
+
+ if(currentPoints<=-20){
+  toast("Daily maximum loss reached. Trading stopped.");
+  return;
+ }
+
+ if(currentPoints>=30){
+  toast("Daily target reached. Trading stopped.");
+  return;
+ }
+
+ const slPrice=direction==="LONG"?entry-sl:entry+sl;
+ const tpPrice=direction==="LONG"?entry+tp:entry-tp;
+
+ const trade={
+  id:Date.now(),
+  direction,
+  entry,
+  slPoints:sl,
+  tpPoints:tp,
+  slPrice,
+  tpPrice,
+  setup:document.getElementById("setup").value,
+  rule:{sl,tp},
+  started:new Date().toISOString()
+ };
+
+ if(!confirm(
+  "Start "+direction+" trade?\n"+
+  "Entry: "+entry+"\n"+
+  "SL: "+slPrice+"\n"+
+  "TP: "+tpPrice
+ ))return;
+
+ data.active=trade;
+ save();
+
+ document.getElementById("entry").value="";
+ render();
+
+ showReminder(true);
+ startReminderTimer();
+
+ toast("Trade started successfully.");
+}
+
+function renderActiveTrade(){
+ const box=document.getElementById("activeTradeBox");
+ const t=data.active;
+
+ if(!t){
+  box.className="empty";
+  box.textContent="No active trade";
+  return;
+ }
+
+ box.className="trade-box card";
+ box.innerHTML=`
+  <div style="display:flex;justify-content:space-between;align-items:center">
+   <strong class="${t.direction==="LONG"?"positive":"negative"}">
+    ${t.direction} ACTIVE
+   </strong>
+   <span class="pill">IN PROGRESS</span>
+  </div>
+  <div class="trade-grid">
+   <div><small>ENTRY PRICE</small><strong>${format(t.entry)}</strong></div>
+   <div><small>STOP LOSS</small><strong class="negative">${format(t.slPrice)}</strong></div>
+   <div><small>TAKE PROFIT</small><strong class="positive">${format(t.tpPrice)}</strong></div>
+   <div><small>STRATEGY</small><strong style="font-size:11px">${escapeHTML(t.setup)}</strong></div>
+  </div>
+  <div class="trade-actions">
+   <button class="btn btn-dark" onclick="showReminder(true)">REMINDER</button>
+   <button class="btn btn-red" onclick="openCloseModal()">CLOSE TRADE</button>
+  </div>`;
+}
+
+function format(n){
+ return Number(n).toLocaleString("en-IN",{maximumFractionDigits:4});
+}
+
+function escapeHTML(s){
+ return String(s).replace(/[&<>"']/g,c=>({
+  "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+ }[c]));
+}
+
+function renderDashboard(){
+ dailyResetCheck();
+
+ const points=getPoints();
+ document.getElementById("tradesCount").textContent=data.today.length+" / 3";
+ document.getElementById("winsCount").textContent=getWins();
+ document.getElementById("lossCount").textContent=getLosses();
+
+ const net=document.getElementById("netPoints");
+ net.textContent=(points>0?"+":"")+format(points);
+ net.className=points>0?"positive":points<0?"negative":"";
+
+ document.getElementById("journalTotal").textContent=data.history.length;
+ const wins=data.history.filter(t=>t.result==="WIN").length;
+ document.getElementById("winRate").textContent=
+  data.history.length?Math.round(wins/data.history.length*100)+"%":"0%";
+
+ renderActiveTrade();
+ renderHistory();
+}
+
+function render(){
+ renderDashboard();
+ save();
+}
+
+function renderHistory(){
+ const list=document.getElementById("historyList");
+
+ if(!data.history.length){
+  list.className="empty";
+  list.textContent="No completed trades yet";
+  return;
+ }
+
+ list.className="";
+ list.innerHTML=[...data.history].reverse().map(t=>`
+  <div class="history-item">
+   <div class="history-top">
+    <strong class="${t.direction==="LONG"?"positive":"negative"}">
+     ${escapeHTML(t.direction)}
+    </strong>
+    <strong class="${t.result==="WIN"?"positive":t.result==="LOSS"?"negative":"yellow"}">
+     ${escapeHTML(t.result)} · ${t.points>0?"+":""}${format(t.points)} pts
+    </strong>
+   </div>
+   <div class="muted" style="margin-top:8px">
+    Entry: ${format(t.entry)} · Exit: ${format(t.exit)}
+   </div>
+   <div class="muted" style="margin-top:5px">
+    ${new Date(t.closed).toLocaleString()}
+   </div>
+  </div>
+ `).join("");
+}
+
+function showReminder(immediate=false){
+ if(!data.active)return;
+
+ const t=data.active;
+ document.getElementById("popupDirection").textContent=t.direction;
+ document.getElementById("popupEntry").textContent=format(t.entry);
+ document.getElementById("popupSL").textContent=format(t.slPrice);
+ document.getElementById("popupTP").textContent=format(t.tpPrice);
+
+ document.getElementById("popupTag").textContent=
+  immediate?"TRADE ACTIVE":"TRADE REMINDER";
+ document.getElementById("popupTitle").textContent=
+  immediate?"Your trade has started!":"Check your active trade";
+ document.getElementById("popupMessage").textContent=
+  "Your "+t.direction+" position is still active. Please check your exchange, Stop Loss and Take Profit.";
+
+ document.getElementById("reminderOverlay").classList.add("show");
+ lastPopupTime=Date.now();
+ popupDismissed=false;
+
+ if(!immediate)sendBrowserNotification("ETH PULSE Reminder",
+  t.direction+" trade is still active. Please check your position.");
+}
+
+function dismissPopup(){
+ document.getElementById("reminderOverlay").classList.remove("show");
+ popupDismissed=true;
+}
+
+function startReminderTimer(){
+ clearInterval(reminderTimer);
+
+ reminderTimer=setInterval(()=>{
+  if(!data.active){
+   clearInterval(reminderTimer);
+   return;
+  }
+
+  const interval=Number(data.settings.reminderInterval||1)*60*1000;
+
+  if(Date.now()-lastPopupTime>=interval){
+   showReminder(false);
+  }
+ },1000);
+}
+
+function stopReminderTimer(){
+ clearInterval(reminderTimer);
+ reminderTimer=null;
+ document.getElementById("reminderOverlay").classList.remove("show");
+}
+
+function openCloseFromPopup(){
+ dismissPopup();
+ openCloseModal();
+}
+
+function openCloseModal(){
+ if(!data.active)return;
+ document.getElementById("exitPrice").value="";
+ document.getElementById("closePreview").textContent="--";
+ document.getElementById("closePoints").textContent="--";
+ document.getElementById("closeOverlay").classList.add("show");
+}
+
+function hideCloseModal(){
+ document.getElementById("closeOverlay").classList.remove("show");
+}
+
+document.getElementById("exitPrice").addEventListener("input",()=>{
+ const t=data.active;
+ const exit=Number(document.getElementById("exitPrice").value);
+ if(!t||!exit)return;
+
+ const points=t.direction==="LONG"?exit-t.entry:t.entry-exit;
+ const result=points>0?"WIN":points<0?"LOSS":"BREAK EVEN";
+
+ document.getElementById("closePreview").textContent=result;
+ document.getElementById("closePreview").className=
+  result==="WIN"?"positive":result==="LOSS"?"negative":"yellow";
+ document.getElementById("closePoints").textContent=
+  (points>0?"+":"")+format(points);
+});
+
+function confirmCloseTrade(){
+ const t=data.active;
+ if(!t)return;
+
+ const exit=Number(document.getElementById("exitPrice").value);
+ if(!exit||exit<=0){
+  toast("Enter a valid exit price.");
+  return;
+ }
+
+ const points=t.direction==="LONG"?exit-t.entry:t.entry-exit;
+ const result=points>0?"WIN":points<0?"LOSS":"BREAK EVEN";
+
+ const completed={
+  ...t,
+  exit,
+  points:Number(points.toFixed(4)),
+  result,
+  closed:new Date().toISOString()
+ };
+
+ data.history.push(completed);
+ data.today.push(completed);
+ data.active=null;
+
+ stopReminderTimer();
+ hideCloseModal();
+ render();
+
+ toast("Trade closed: "+result);
+
+ const total=getPoints();
+ if(total<=-20){
+  setTimeout(()=>alert("Daily maximum loss of -20 points reached. Stop trading today."),300);
+ }else if(total>=20){
+  setTimeout(()=>alert("Daily profit target reached: "+format(total)+" points."),300);
+ }
+}
+
+function enableNotifications(){
+ if(!("Notification" in window)){
+  toast("Browser notifications are not supported.");
+  return;
+ }
+ Notification.requestPermission().then(permission=>{
+  toast(permission==="granted"?"Notifications enabled.":"Notification permission not granted.");
+ });
+}
+
+function sendBrowserNotification(title,message){
+ if("Notification" in window&&Notification.permission==="granted"){
+  try{new Notification(title,{body:message})}catch(e){}
+ }
+}
+
+function saveSettings(){
+ data.settings.reminderInterval=Number(
+  document.getElementById("reminderInterval").value
+ );
+ save();
+ if(data.active)startReminderTimer();
+ toast("Settings saved.");
+}
+
+function exportCSV(){
+ if(!data.history.length){
+  toast("No completed trades to export.");
+  return;
+ }
+
+ const rows=[
+  ["Date","Direction","Entry","Exit","SL","TP","Result","Points","Strategy"]
+ ];
+
+ data.history.forEach(t=>{
+  rows.push([
+   t.closed,t.direction,t.entry,t.exit,t.slPrice,t.tpPrice,
+   t.result,t.points,t.setup
+  ]);
+ });
+
+ const csv=rows.map(row=>row.map(value=>
+  '"'+String(value??"").replace(/"/g,'""')+'"'
+ ).join(",")).join("\n");
+
+ const blob=new Blob(["\uFEFF"+csv],{type:"text/csv;charset=utf-8"});
+ const url=URL.createObjectURL(blob);
+ const a=document.createElement("a");
+ a.href=url;
+ a.download="ETH-PULSE-Trade-Journal.csv";
+ a.click();
+ URL.revokeObjectURL(url);
+}
+
+function clearHistory(){
+ if(!confirm("Clear all completed trade history?"))return;
+ data.history=[];
+ save();
+ render();
+ toast("Journal cleared.");
+}
+
+function resetDaily(){
+ if(!confirm("Reset today's trading statistics? Active trade will remain open."))return;
+ data.today=[];
+ data.date=todayKey();
+ save();
+ render();
+ toast("Daily statistics reset.");
+}
+
+function resetApp(){
+ if(!confirm("Reset ALL app data including history and active trade?"))return;
+ stopReminderTimer();
+ data=defaultData();
+ save();
+ document.getElementById("reminderInterval").value=1;
+ render();
+ toast("App data reset.");
+}
+
+function initialize(){
+ dailyResetCheck();
+ document.getElementById("reminderInterval").value=
+  data.settings.reminderInterval||1;
+
+ updateSuggestedRules();
+ render();
+
+ if(data.active){
+  startReminderTimer();
+  setTimeout(()=>showReminder(true),500);
+ }
+}
+
+initialize();
+</script>
+</body>
+</html>
