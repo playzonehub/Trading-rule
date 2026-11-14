@@ -3,628 +3,421 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#080d18">
-<title>ETH Pulse | Trading Journal</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#080f1e">
+<title>ETH Pulse | Trading Dashboard</title>
+<link rel="icon" href="app-icon.svg" type="image/svg+xml">
 <style>
 :root{
-  --bg:#080d18;
-  --surface:#101827;
-  --surface2:#151f31;
-  --border:#25334a;
-  --text:#f2f6ff;
-  --muted:#8d9bb2;
-  --blue:#568cff;
-  --cyan:#42d8e8;
-  --green:#24d69a;
-  --red:#ff627b;
-  --gold:#f3bd60;
+  --bg:#080f1e;--panel:#111c30;--panel2:#16243b;
+  --line:#253650;--text:#edf4ff;--muted:#8fa3bd;
+  --blue:#438cff;--cyan:#27d5e8;--green:#19d49a;
+  --red:#ff5572;--yellow:#ffca65;
 }
 *{box-sizing:border-box}
-body{
-  margin:0;
-  background:
-    radial-gradient(ellipse at 50% -20%,#19325b 0%,transparent 48%),
-    var(--bg);
-  color:var(--text);
-  font-family:Inter,system-ui,-apple-system,sans-serif;
-}
+body{margin:0;background:var(--bg);color:var(--text);
+font-family:Inter,system-ui,Arial,sans-serif}
 button,input,select{font:inherit}
-.app{max-width:1150px;margin:auto;padding:22px 18px 55px}
-header{
- display:flex;align-items:center;justify-content:space-between;
- flex-wrap:wrap;gap:15px;margin-bottom:27px
-}
-.logo{display:flex;align-items:center;gap:12px}
-.logo-icon{
- width:43px;height:43px;border-radius:14px;
- background:linear-gradient(135deg,#568cff,#42d8e8);
- display:grid;place-items:center;font-size:21px;color:#07101f;
- font-weight:900;
-}
-.logo h1{font-size:19px;margin:0;letter-spacing:.5px}
-.logo p{margin:4px 0 0;color:var(--muted);font-size:11px}
-.header-right{display:flex;align-items:center;gap:9px}
-.tag{
- padding:8px 12px;border-radius:30px;
- border:1px solid var(--border);font-size:11px;color:var(--muted)
-}
-.online{color:var(--green)}
-.section-title{font-size:18px;font-weight:750;margin:0 0 15px}
-.grid{
- display:grid;grid-template-columns:repeat(4,1fr);gap:13px;
- margin-bottom:22px
-}
-.card,.panel{
- background:linear-gradient(145deg,#121d30,#0f1726);
- border:1px solid var(--border);
- border-radius:17px;padding:19px;
- box-shadow:0 12px 35px #0002;
-}
-.metric-label{color:var(--muted);font-size:12px}
-.metric-value{font-size:27px;font-weight:800;margin:11px 0 5px}
-.metric-note{font-size:11px;color:var(--muted)}
-.green{color:var(--green)}
-.red{color:var(--red)}
-.blue{color:var(--blue)}
-.gold{color:var(--gold)}
-.main-grid{
- display:grid;grid-template-columns:1.15fr .85fr;gap:16px;
-}
-.panel h2{font-size:16px;margin:0 0 18px}
-.panel-sub{font-size:12px;color:var(--muted);margin-top:-11px;margin-bottom:17px}
-.status{
- background:#17263c;border:1px solid #29456a;
- padding:13px;border-radius:12px;font-size:12px;
- line-height:1.6;margin-bottom:17px;color:#c4d9ff;
-}
-.status.good{background:#10382e;border-color:#1b7054;color:#a9f5d7}
-.status.bad{background:#401f2a;border-color:#713448;color:#ffd0d8}
-.rule-line{
- display:flex;justify-content:space-between;align-items:center;
- padding:12px 0;border-bottom:1px solid var(--border);
- font-size:13px;gap:10px
-}
-.rule-line:last-child{border:0}
-.rule-line span{color:var(--muted)}
-label{display:block;color:var(--muted);font-size:12px;margin:14px 0 7px}
-input,select{
- width:100%;padding:13px 14px;border-radius:11px;
- background:#0b1423;color:var(--text);
- border:1px solid #2b3b56;outline:none;
-}
+button{cursor:pointer}
+.app{max-width:1100px;margin:auto;padding:18px 16px 100px}
+header{display:flex;align-items:center;justify-content:space-between;
+gap:12px;margin-bottom:22px}
+.brand{display:flex;align-items:center;gap:11px}
+.brand-mark{width:42px;height:42px;border-radius:14px;
+background:linear-gradient(135deg,#287cff,#20d9df);
+display:grid;place-items:center;font-weight:900;color:white}
+.brand h1{font-size:19px;margin:0}
+.brand small{color:var(--muted);font-size:11px}
+.status{font-size:11px;color:var(--green);background:#12352f;
+padding:8px 11px;border-radius:20px}
+h2{font-size:21px;margin:0 0 5px}
+.sub{color:var(--muted);font-size:13px}
+.hero{background:linear-gradient(120deg,#142d52,#14203a 65%,#123d48);
+border:1px solid #29466b;border-radius:22px;padding:20px;margin-bottom:16px}
+.hero-top{display:flex;justify-content:space-between;align-items:center}
+.pair{font-size:13px;color:#c6d8f2}
+.big{font-size:30px;font-weight:800;margin:14px 0 3px}
+.hero-foot{display:flex;justify-content:space-between;color:#b5c9e4;font-size:12px}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:14px 0}
+.stat,.panel{background:var(--panel);border:1px solid var(--line);
+border-radius:17px;padding:16px}
+.stat small{display:block;color:var(--muted);font-size:11px}
+.stat strong{display:block;font-size:21px;margin-top:8px}
+.green{color:var(--green)!important}.red{color:var(--red)!important}
+.yellow{color:var(--yellow)!important}
+.tabs{display:flex;gap:7px;overflow:auto;padding:5px 0 14px;
+position:sticky;top:0;background:var(--bg);z-index:5}
+.tab{border:1px solid var(--line);background:var(--panel);
+color:var(--muted);padding:11px 15px;border-radius:12px;
+white-space:nowrap;font-size:12px}
+.tab.active{background:#1c4e91;border-color:#438cff;color:white}
+.page{display:none}.page.active{display:block}
+.section-title{display:flex;justify-content:space-between;
+align-items:center;margin:12px 0}
+.section-title h3{font-size:15px;margin:0}
+.panel{margin-bottom:13px}
+.panel h3{font-size:14px;margin:0 0 14px}
+label{display:block;font-size:12px;color:var(--muted);margin-bottom:7px}
+input,select{width:100%;padding:13px;background:#0b1628;
+border:1px solid var(--line);border-radius:11px;color:white;outline:none}
 input:focus,select:focus{border-color:var(--blue)}
-button{
- cursor:pointer;border:0;border-radius:11px;
- padding:13px 15px;font-weight:750;transition:.2s;
-}
-button:hover{filter:brightness(1.12);transform:translateY(-1px)}
-button:disabled{opacity:.35;cursor:not-allowed;transform:none}
-.primary{
- width:100%;margin-top:17px;color:#071525;
- background:linear-gradient(110deg,#568cff,#42d8e8);
-}
-.secondary{background:#1d2b43;color:#dce8ff}
-.danger{background:#512334;color:#ffd6df}
-.small-note{font-size:11px;color:var(--muted);line-height:1.6;margin-top:12px}
-.trade-details{
- background:#0a1423;border:1px solid var(--border);
- border-radius:13px;padding:15px;margin-top:15px
-}
-.trade-head{display:flex;justify-content:space-between;align-items:center}
-.live{color:var(--green);font-size:11px}
-.levels{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:15px}
-.level{
- background:#152238;border-radius:11px;padding:12px;
-}
-.level small{display:block;color:var(--muted);font-size:10px}
-.level strong{display:block;font-size:17px;margin-top:6px}
-.progress{
- height:7px;border-radius:20px;background:#25334a;
- overflow:hidden;margin-top:14px
-}
-.progress span{
- display:block;height:100%;width:0%;
- background:linear-gradient(90deg,var(--blue),var(--green));
-}
-.history-wrap{overflow-x:auto}
-table{width:100%;border-collapse:collapse;min-width:440px;font-size:12px}
-th,td{text-align:left;padding:13px 9px;border-bottom:1px solid var(--border)}
-th{color:var(--muted);font-weight:600}
-.empty{text-align:center;color:var(--muted);padding:22px}
-.footer{text-align:center;color:var(--muted);font-size:10px;margin-top:25px;line-height:1.7}
-.overlay{
- position:fixed;inset:0;background:#020610df;
- z-index:10;display:none;align-items:center;justify-content:center;padding:17px
-}
-.overlay.show{display:flex}
-.modal{
- width:min(420px,100%);padding:24px;border-radius:20px;
- background:#152238;border:1px solid #47638b;
- box-shadow:0 25px 80px #000b;
-}
-.modal h2{margin:0 0 10px;font-size:21px}
-.modal p{color:#bdcce3;font-size:13px;line-height:1.7}
-.alert-icon{
- width:44px;height:44px;border-radius:14px;
- background:#49381f;color:var(--gold);
- display:grid;place-items:center;font-size:22px;margin-bottom:15px
-}
-@media(max-width:800px){
- .grid{grid-template-columns:repeat(2,1fr)}
- .main-grid{grid-template-columns:1fr}
-}
-@media(max-width:430px){
- .app{padding:17px 12px}
- .card{padding:14px}
- .metric-value{font-size:23px}
- .header-right{width:100%}
- .tag{flex:1;text-align:center}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+.field{margin-bottom:13px}
+.btn{border:0;border-radius:12px;padding:13px 16px;
+font-weight:700;color:white;background:var(--blue)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.btn-green{background:#087c60}.btn-red{background:#a82f49}
+.btn-dark{background:#26364f}
+.btn-block{width:100%;margin-top:5px}
+.btn-row{display:flex;gap:9px;flex-wrap:wrap}
+.rule{display:flex;justify-content:space-between;padding:10px 0;
+border-bottom:1px solid var(--line);font-size:12px}
+.rule:last-child{border:0}
+.pill{padding:5px 9px;border-radius:20px;background:#1b2d48;
+font-size:11px;color:#b9d3f4}
+.active-trade{border:1px solid #276b67;
+background:linear-gradient(145deg,#112c32,#111c30)}
+.price-box{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;
+margin:14px 0}
+.price-box div{background:#0a1726;border-radius:12px;padding:12px}
+.price-box small{color:var(--muted);font-size:10px}
+.price-box strong{display:block;margin-top:6px;font-size:15px}
+.progress{height:8px;background:#26364b;border-radius:20px;overflow:hidden}
+.progress span{display:block;height:100%;background:var(--green);width:0}
+.trade-row{padding:13px 0;border-bottom:1px solid var(--line);
+display:flex;justify-content:space-between;gap:10px;font-size:12px}
+.trade-row:last-child{border:0}
+.empty{text-align:center;color:var(--muted);padding:25px 5px;font-size:13px}
+.note{font-size:11px;color:var(--muted);line-height:1.6}
+.modal-bg{position:fixed;inset:0;background:#000b;display:none;
+align-items:center;justify-content:center;padding:18px;z-index:20}
+.modal{background:var(--panel);border:1px solid var(--line);
+border-radius:20px;padding:22px;width:100%;max-width:390px}
+.modal h3{margin-top:0}
+.modal p{font-size:13px;color:var(--muted);line-height:1.5}
+.bottom-note{text-align:center;color:#63758e;font-size:10px;margin-top:25px}
+@media(max-width:650px){
+ .app{padding:14px 12px 95px}
+ .grid{grid-template-columns:1fr 1fr;gap:9px}
+ .stat{padding:13px}.stat strong{font-size:19px}
+ .hero{padding:17px}.big{font-size:27px}
+ .form-grid{gap:9px}
 }
 </style>
 </head>
-
 <body>
 <div class="app">
-
 <header>
- <div class="logo">
-  <div class="logo-icon">E</div>
-  <div>
-   <h1>ETH PULSE</h1>
-   <p>PRO TRADING JOURNAL</p>
-  </div>
+ <div class="brand">
+  <div class="brand-mark">EP</div>
+  <div><h1>ETH PULSE</h1><small>SMART TRADING RULES</small></div>
  </div>
- <div class="header-right">
-  <div class="tag online">● LOCAL TRACKER</div>
-  <div class="tag">ETHUSD · DELTA</div>
- </div>
+ <div class="status">● SYSTEM READY</div>
 </header>
 
-<h2 class="section-title">Trading Overview</h2>
+<div class="hero">
+ <div class="hero-top">
+  <div><div class="pair">ETHUSD · PERPETUAL</div>
+  <strong>Delta Exchange India</strong></div>
+  <span class="pill">MANUAL MODE</span>
+ </div>
+ <div class="big">Trading Dashboard</div>
+ <div class="hero-foot"><span id="today"></span><span>Maximum 3 trades / day</span></div>
+</div>
 
 <div class="grid">
- <div class="card">
-  <div class="metric-label">TODAY'S NET POINTS</div>
-  <div class="metric-value" id="net">0.0</div>
-  <div class="metric-note">Target +20 to +30</div>
- </div>
- <div class="card">
-  <div class="metric-label">TRADES TAKEN</div>
-  <div class="metric-value" id="count">0 / 3</div>
-  <div class="metric-note">Daily trade limit</div>
- </div>
- <div class="card">
-  <div class="metric-label">WIN RATE</div>
-  <div class="metric-value blue" id="winrate">0%</div>
-  <div class="metric-note">Based on closed trades</div>
- </div>
- <div class="card">
-  <div class="metric-label">DAILY LOSS LIMIT</div>
-  <div class="metric-value red">-20</div>
-  <div class="metric-note">Maximum net loss points</div>
- </div>
+ <div class="stat"><small>DAILY POINTS</small><strong id="dailyPoints">0</strong></div>
+ <div class="stat"><small>TRADES TODAY</small><strong id="tradeCount">0 / 3</strong></div>
+ <div class="stat"><small>WINS</small><strong class="green" id="wins">0</strong></div>
+ <div class="stat"><small>LOSSES</small><strong class="red" id="losses">0</strong></div>
 </div>
 
-<div class="main-grid">
+<nav class="tabs">
+ <button class="tab active" data-page="home">Overview</button>
+ <button class="tab" data-page="new">New Trade</button>
+ <button class="tab" data-page="journal">Journal</button>
+ <button class="tab" data-page="settings">Settings</button>
+</nav>
 
-<section class="panel">
- <h2>Trade Execution</h2>
- <p class="panel-sub">Your next setup and position management</p>
-
- <div class="status" id="status">
-  No active position. Wait for your valid trading setup.
+<section class="page active" id="home">
+ <div class="section-title"><h3>Today's Performance</h3><span class="pill" id="dayStatus">READY</span></div>
+ <div class="panel">
+  <div class="rule"><span>Daily target</span><strong class="green">+20 to +30 points</strong></div>
+  <div class="rule"><span>Maximum daily loss</span><strong class="red">-20 points</strong></div>
+  <div class="rule"><span>Current progress</span><strong id="progressText">0 / 20 points</strong></div>
+  <div class="progress"><span id="progressBar"></span></div>
  </div>
 
- <div id="setup">
-  <div class="rule-line">
-   <span>Next trade number</span><b id="next">Trade 1</b>
-  </div>
-  <div class="rule-line">
-   <span>Stop loss</span><b class="red" id="risk">5 points</b>
-  </div>
-  <div class="rule-line">
-   <span>Take profit</span><b class="green" id="target">10 points</b>
-  </div>
-  <div class="rule-line">
-   <span>Previous result</span><b id="previous">Not applicable</b>
-  </div>
-
-  <label>Position direction</label>
-  <select id="side">
-   <option value="LONG">LONG / BUY</option>
-   <option value="SHORT">SHORT / SELL</option>
-  </select>
-
-  <label>ETHUSD entry price</label>
-  <input id="entry" type="number" step="0.01" placeholder="Enter entry price">
-
-  <button class="primary" id="start">START NEW TRADE →</button>
+ <div class="section-title"><h3>Active Trade</h3><span class="pill" id="activeStatus">NO ACTIVE TRADE</span></div>
+ <div class="panel active-trade" id="activeCard">
+  <div class="empty">No active trade. Start a trade after checking your setup.</div>
  </div>
 
- <div id="active" style="display:none">
-  <div class="trade-details">
-   <div class="trade-head">
-    <b id="activeName">Trade 1</b>
-    <span class="live">● POSITION OPEN</span>
-   </div>
-   <div class="levels">
-    <div class="level"><small>ENTRY PRICE</small><strong id="entryShow"></strong></div>
-    <div class="level"><small>POSITION</small><strong id="sideShow"></strong></div>
-    <div class="level"><small>STOP LOSS</small><strong class="red" id="slShow"></strong></div>
-    <div class="level"><small>TAKE PROFIT</small><strong class="green" id="tpShow"></strong></div>
-   </div>
-  </div>
-
-  <label>Actual exit price</label>
-  <input id="exit" type="number" step="0.01" placeholder="Enter exit price">
-
-  <button class="primary" id="close">CLOSE POSITION & SAVE RESULT</button>
-  <button class="secondary" id="remind" style="width:100%;margin-top:9px">SHOW OPEN TRADE ALERT</button>
- </div>
-
- <div class="small-note">
-  The dashboard calculates price levels. It does not place orders on Delta Exchange.
+ <div class="section-title"><h3>Trading Rules</h3></div>
+ <div class="panel">
+  <div class="rule"><span>Trade 1</span><strong>SL 5 · TP 10</strong></div>
+  <div class="rule"><span>Trade 2 after profit</span><strong>SL 10 · TP 15</strong></div>
+  <div class="rule"><span>Trade 2 after loss</span><strong>SL 5 · TP 15</strong></div>
+  <div class="rule"><span>Trade 3</span><strong>Same rule as previous result</strong></div>
+  <p class="note">Points refer to ETH price movement, not rupee profit. This dashboard does not connect to live Delta prices or place orders.</p>
  </div>
 </section>
 
-<section class="panel">
- <h2>Daily Trading Rules</h2>
- <p class="panel-sub">Your fixed risk management strategy</p>
-
- <div class="rule-line">
-  <span>Trade 01</span><b>SL 5 / TP 10</b>
- </div>
- <div class="rule-line">
-  <span>After a winning trade</span><b class="green">SL 10 / TP 15</b>
- </div>
- <div class="rule-line">
-  <span>After a losing trade</span><b class="red">SL 5 / TP 15</b>
- </div>
- <div class="rule-line">
-  <span>Maximum trades</span><b>3 per day</b>
- </div>
- <div class="rule-line">
-  <span>Daily target</span><b class="green">+20 to +30</b>
- </div>
- <div class="rule-line">
-  <span>Daily stop</span><b class="red">-20 points</b>
- </div>
-
- <div class="status" style="margin-top:17px">
-  <b>Discipline reminder</b><br>
-  One trade at a time. Never increase your position size to recover a loss. Stop when your daily limit is reached.
- </div>
-
- <button class="secondary" id="notify" style="width:100%">
-  ENABLE NOTIFICATIONS
- </button>
- <div class="small-note" id="notifyText">
-  Notifications require browser permission.
+<section class="page" id="new">
+ <div class="section-title"><h3>Create New Trade</h3><span class="pill">ETHUSD</span></div>
+ <div class="panel">
+  <div class="field">
+   <label>Trade direction</label>
+   <select id="direction"><option value="LONG">LONG / BUY</option><option value="SHORT">SHORT / SELL</option></select>
+  </div>
+  <div class="field">
+   <label>Entry price</label>
+   <input id="entry" type="number" step="0.01" placeholder="Enter ETH entry price">
+  </div>
+  <div class="form-grid">
+   <div class="field"><label>Stop loss (points)</label><input id="slPoints" readonly></div>
+   <div class="field"><label>Take profit (points)</label><input id="tpPoints" readonly></div>
+  </div>
+  <div class="panel" style="background:#0b1729">
+   <div class="rule"><span>Suggested stop price</span><strong id="slPrice">-</strong></div>
+   <div class="rule"><span>Suggested target price</span><strong id="tpPrice">-</strong></div>
+   <div class="rule"><span>Risk / Reward</span><strong id="rr">1 : 2</strong></div>
+  </div>
+  <div class="field">
+   <label>Setup confirmation</label>
+   <select id="setup">
+    <option value="">Select setup status</option>
+    <option>Liquidity sweep + CHoCH</option>
+    <option>BOS + Order Block retest</option>
+    <option>Liquidity sweep + BOS + OB</option>
+   </select>
+  </div>
+  <button class="btn btn-block" id="startTrade">Review & Start Trade</button>
+  <p class="note">Only start after confirming your setup on the chart. This tool records your plan, not an exchange order.</p>
  </div>
 </section>
 
-</div>
-
-<section class="panel" style="margin-top:17px">
- <h2>Today's Performance</h2>
- <div class="rule-line">
-  <span>Progress towards +20 points</span>
-  <b id="progressText">0%</b>
+<section class="page" id="journal">
+ <div class="section-title"><h3>Trade Journal</h3><button class="btn btn-dark" id="exportBtn">Export CSV</button></div>
+ <div class="panel">
+  <div id="journalList"><div class="empty">No trades recorded yet.</div></div>
  </div>
- <div class="progress"><span id="progressBar"></span></div>
-
- <div style="display:flex;justify-content:space-between;align-items:center;margin-top:23px;gap:10px;flex-wrap:wrap">
-  <h2 style="margin:0">Trade History</h2>
-  <span class="tag" id="historyCount">0 records</span>
- </div>
-
- <div class="history-wrap">
-  <table>
-   <thead>
-    <tr>
-     <th>TRADE</th>
-     <th>POSITION</th>
-     <th>ENTRY</th>
-     <th>EXIT</th>
-     <th>RESULT</th>
-     <th>POINTS</th>
-    </tr>
-   </thead>
-   <tbody id="history">
-    <tr><td colspan="6" class="empty">No trades recorded yet.</td></tr>
-   </tbody>
-  </table>
- </div>
-
- <button class="danger" id="reset" style="margin-top:17px">RESET TODAY'S TRACKER</button>
+ <button class="btn btn-dark btn-block" id="clearJournal">Clear Journal</button>
 </section>
 
-<div class="footer">
- ETH PULSE · PERSONAL TRADING JOURNAL<br>
- Points represent ETHUSD price movement, not account profit in rupees.
- Fees, funding, slippage, leverage and contract quantity are excluded.
- Trading involves substantial risk. Daily targets are not guaranteed.
+<section class="page" id="settings">
+ <div class="section-title"><h3>App Settings</h3></div>
+ <div class="panel">
+  <h3>Trading limits</h3>
+  <div class="rule"><span>Maximum trades per day</span><strong>3</strong></div>
+  <div class="rule"><span>Daily target</span><strong>+20 to +30 points</strong></div>
+  <div class="rule"><span>Daily loss limit</span><strong>-20 points</strong></div>
+  <div class="rule"><span>Trade 1 SL / TP</span><strong>5 / 10</strong></div>
+  <div class="rule"><span>Following trade TP</span><strong>15</strong></div>
+ </div>
+ <div class="panel">
+  <h3>Notifications</h3>
+  <p class="note">Allow browser notifications for trade-start alerts. Reminder alerts work while the page is active. Background delivery is not guaranteed after closing the browser.</p>
+  <button class="btn btn-block" id="notifyBtn">Enable Notifications</button>
+  <div class="field" style="margin-top:15px">
+   <label>Reminder interval</label>
+   <select id="reminderInterval">
+    <option value="1">Every 1 minute</option>
+    <option value="2">Every 2 minutes</option>
+    <option value="5">Every 5 minutes</option>
+   </select>
+  </div>
+  <button class="btn btn-dark btn-block" id="saveSettings">Save Settings</button>
+ </div>
+ <div class="panel">
+  <h3>Data management</h3>
+  <p class="note">Your journal is saved in this browser's local storage. Clearing browser data may delete it.</p>
+  <button class="btn btn-red btn-block" id="resetApp">Reset All App Data</button>
+ </div>
+</section>
+
+<div class="bottom-note">ETH PULSE · TRADING DISCIPLINE TOOL · NOT FINANCIAL ADVICE</div>
 </div>
 
-</div>
-
-<div class="overlay" id="overlay">
+<div class="modal-bg" id="modal">
  <div class="modal">
-  <div class="alert-icon">!</div>
-  <h2>Open Position Alert</h2>
-  <p id="popText">
-   You have an active ETHUSD position. Check your stop loss and target.
-  </p>
-  <div class="levels">
-   <div class="level">
-    <small>STOP LOSS</small>
-    <strong class="red" id="popSL"></strong>
-   </div>
-   <div class="level">
-    <small>TAKE PROFIT</small>
-    <strong class="green" id="popTP"></strong>
-   </div>
+  <h3 id="modalTitle">Confirm trade</h3>
+  <p id="modalText"></p>
+  <div class="btn-row">
+   <button class="btn btn-green" id="confirmBtn">Confirm</button>
+   <button class="btn btn-dark" id="cancelBtn">Cancel</button>
   </div>
-  <button class="primary" id="ack">I HAVE CHECKED MY TRADE</button>
  </div>
 </div>
 
 <script>
-const $ = id => document.getElementById(id);
-const key = 'ethPulseProfessionalV1';
-
-function today(){
- return new Date().toLocaleDateString('en-CA');
+const $=id=>document.getElementById(id);
+const todayKey=()=>new Date().toLocaleDateString('en-CA');
+const storeKey='ethPulseAppV1';
+let data=JSON.parse(localStorage.getItem(storeKey)||'{}');
+if(data.date!==todayKey()){
+ data.date=todayKey();data.today=[];data.active=null;
 }
+data.today=data.today||[];
+data.history=data.history||[];
+data.settings=data.settings||{reminder:1};
+let pending=null,reminderTimer=null;
 
-function fresh(){
- return {
-  date:today(),
-  trades:[],
-  active:null,
-  previous:null,
-  halted:false
- };
+function save(){localStorage.setItem(storeKey,JSON.stringify(data))}
+function todayTrades(){return data.today}
+function pointsTotal(){return todayTrades().reduce((s,t)=>s+(t.points||0),0)}
+function wins(){return todayTrades().filter(t=>t.result==='WIN').length}
+function losses(){return todayTrades().filter(t=>t.result==='LOSS').length}
+function lastResult(){
+ const a=todayTrades();return a.length?a[a.length-1].result:null;
 }
-
-function load(){
- try{
-  let s=JSON.parse(localStorage.getItem(key));
-  return s && s.date===today()?s:fresh();
- }catch(e){return fresh();}
+function getRules(){
+ if(todayTrades().length===0)return {sl:5,tp:10};
+ return {sl:lastResult()==='WIN'?10:5,tp:15};
 }
-
-let state=load();
-
-function save(){
- localStorage.setItem(key,JSON.stringify(state));
+function fmt(n){return Number(n).toLocaleString('en-US',{maximumFractionDigits:2})}
+function update(){
+ $('today').textContent=new Date().toLocaleDateString(undefined,{weekday:'short',day:'numeric',month:'short',year:'numeric'});
+ $('dailyPoints').textContent=(pointsTotal()>0?'+':'')+fmt(pointsTotal());
+ $('dailyPoints').className=pointsTotal()>0?'green':pointsTotal()<0?'red':'';
+ $('tradeCount').textContent=todayTrades().length+' / 3';
+ $('wins').textContent=wins();$('losses').textContent=losses();
+ $('progressText').textContent=fmt(pointsTotal())+' / 20 points';
+ $('progressBar').style.width=Math.min(100,Math.max(0,pointsTotal()/20*100))+'%';
+ let stopped=pointsTotal()<=-20||pointsTotal()>=30||todayTrades().length>=3;
+ $('dayStatus').textContent=pointsTotal()<=-20?'LOSS LIMIT':pointsTotal()>=20?'TARGET REACHED':stopped?'LIMIT REACHED':'READY';
+ $('startTrade').disabled=!!data.active||stopped;
+ $('activeStatus').textContent=data.active?'TRADE OPEN':'NO ACTIVE TRADE';
+ renderActive();renderJournal();
 }
-
-function net(){
- return state.trades.reduce((a,t)=>a+t.points,0);
+function calcPrices(){
+ let e=Number($('entry').value),d=$('direction').value,r=getRules();
+ $('slPoints').value=r.sl;$('tpPoints').value=r.tp;
+ if(!e){$('slPrice').textContent='-';$('tpPrice').textContent='-';return}
+ let sign=d==='LONG'?1:-1;
+ $('slPrice').textContent=fmt(e-sign*r.sl);
+ $('tpPrice').textContent=fmt(e+sign*r.tp);
+ $('rr').textContent='1 : '+(r.tp/r.sl).toFixed(1);
 }
+$('entry').addEventListener('input',calcPrices);
+$('direction').addEventListener('change',calcPrices);
 
-function fmt(n){
- return Number(n).toLocaleString('en-US',{
-  minimumFractionDigits:2,
-  maximumFractionDigits:2
- });
-}
-
-function rules(){
- if(state.trades.length===0)
-  return {sl:5,tp:10};
-
- return state.previous==='WIN'
-  ? {sl:10,tp:15}
-  : {sl:5,tp:15};
-}
-
-function popup(){
- if(!state.active)return;
-
- $('popSL').textContent=fmt(state.active.slPrice);
- $('popTP').textContent=fmt(state.active.tpPrice);
- $('popText').textContent=
-  'Trade '+state.active.number+' is still open. Check your Delta Exchange ETHUSD position. Do not open another trade before closing this one.';
-
- $('overlay').classList.add('show');
-}
-
-function render(){
- let total=net();
- let wins=state.trades.filter(t=>t.points>0).length;
- let losses=state.trades.filter(t=>t.points<0).length;
- let closed=wins+losses;
- let c=rules();
-
- $('net').textContent=(total>0?'+':'')+total.toFixed(1);
- $('net').className='metric-value '+(total>0?'green':total<0?'red':'');
-
- $('count').textContent=state.trades.length+' / 3';
- $('winrate').textContent=closed?Math.round(wins/closed*100)+'%':'0%';
-
- $('next').textContent='Trade '+(state.trades.length+1);
- $('risk').textContent=c.sl+' points';
- $('target').textContent=c.tp+' points';
- $('previous').textContent=state.previous||'Not applicable';
-
- let stop=state.halted || total<=-20 || total>=20 ||
-  state.trades.length>=3;
-
- $('setup').style.display=state.active?'none':'block';
- $('active').style.display=state.active?'block':'none';
- $('start').disabled=stop || !!state.active;
-
- if(state.active){
-  let a=state.active;
-  $('activeName').textContent='TRADE '+a.number;
-  $('entryShow').textContent=fmt(a.entry);
-  $('sideShow').textContent=a.side;
-  $('slShow').textContent=fmt(a.slPrice);
-  $('tpShow').textContent=fmt(a.tpPrice);
- }
-
- let status=$('status');
-
- if(state.active){
-  status.className='status bad';
-  status.textContent='POSITION OPEN. Manage your existing trade only.';
- }else if(total<=-20 || state.halted){
-  status.className='status bad';
-  status.textContent='DAILY STOP ACTIVATED. No more trades today.';
- }else if(total>=20){
-  status.className='status good';
-  status.textContent='DAILY TARGET REACHED. Protect your result.';
- }else if(state.trades.length>=3){
-  status.className='status bad';
-  status.textContent='Three trades completed. Trading finished today.';
- }else{
-  status.className='status';
-  status.textContent='Ready for next setup. Follow your '+c.sl+' SL / '+c.tp+' TP rules.';
- }
-
- let pct=Math.min(100,Math.max(0,total/20*100));
- $('progressBar').style.width=pct+'%';
- $('progressText').textContent=Math.round(pct)+'%';
-
- $('historyCount').textContent=state.trades.length+' records';
-
- if(!state.trades.length){
-  $('history').innerHTML=
-   '<tr><td colspan="6" class="empty">No trades recorded yet.</td></tr>';
- }else{
-  $('history').innerHTML=state.trades.map(t=>`
-   <tr>
-    <td>#${t.number}</td>
-    <td>${t.side}</td>
-    <td>${fmt(t.entry)}</td>
-    <td>${fmt(t.exit)}</td>
-    <td class="${t.points>0?'green':t.points<0?'red':''}">${t.result}</td>
-    <td class="${t.points>0?'green':t.points<0?'red':''}">${t.points>0?'+':''}${t.points.toFixed(1)}</td>
-   </tr>
-  `).join('');
- }
-}
-
-$('start').onclick=()=>{
- let entry=Number($('entry').value);
-
- if(!Number.isFinite(entry)||entry<=0){
-  alert('Enter a valid entry price.');
-  return;
- }
-
- let c=rules();
- let side=$('side').value;
- let sign=side==='LONG'?1:-1;
-
- state.active={
-  number:state.trades.length+1,
-  entry,side,
-  sl:c.sl,
-  tp:c.tp,
-  slPrice:entry-sign*c.sl,
-  tpPrice:entry+sign*c.tp,
-  time:Date.now()
- };
-
- $('entry').value='';
- save();
- render();
- popup();
-
- if('Notification' in window && Notification.permission==='granted'){
-  new Notification('ETH PULSE: Trade Open',{
-   body:'SL '+fmt(state.active.slPrice)+' | TP '+fmt(state.active.tpPrice)
-  });
- }
-};
-
-$('close').onclick=()=>{
- if(!state.active)return;
-
- let exit=Number($('exit').value);
-
- if(!Number.isFinite(exit)||exit<=0){
-  alert('Enter a valid exit price.');
-  return;
- }
-
- let a=state.active;
- let points=(exit-a.entry)*(a.side==='LONG'?1:-1);
-
- let result=points>0?'WIN':points<0?'LOSS':'BREAKEVEN';
-
- state.trades.push({
-  number:a.number,
-  side:a.side,
-  entry:a.entry,
-  exit,
-  points,
-  result
- });
-
- if(result!=='BREAKEVEN')state.previous=result;
-
- state.active=null;
- $('exit').value='';
- $('overlay').classList.remove('show');
-
- if(net()<=-20 || net()>=20 || state.trades.length>=3){
-  state.halted=true;
- }
-
- save();
- render();
-};
-
-$('remind').onclick=popup;
-$('ack').onclick=()=>$('overlay').classList.remove('show');
-
-$('notify').onclick=async()=>{
- if(!('Notification' in window)){
-  $('notifyText').textContent='Browser notifications are not supported.';
-  return;
- }
-
- let permission=await Notification.requestPermission();
-
- $('notifyText').textContent=
-  permission==='granted'
-  ? 'Notifications enabled.'
-  : 'Permission not granted. In-page reminders remain available.';
-};
-
-$('reset').onclick=()=>{
- if(!confirm('Reset all of today’s trades and start fresh?'))return;
-
- state=fresh();
- save();
- $('overlay').classList.remove('show');
- render();
-};
-
-// Repeat reminder while a trade is open.
-setInterval(()=>{
- if(!state.active)return;
- popup();
-
- if('Notification' in window && Notification.permission==='granted'){
-  new Notification('ETH PULSE: Open Trade',{
-   body:'Your ETHUSD trade is still open. Check your SL and TP.'
-  });
- }
-},60000);
-
-// Show reminder again when returning to the page.
-document.addEventListener('visibilitychange',()=>{
- if(!document.hidden && state.active)popup();
+document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{
+ document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+ document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
+ b.classList.add('active');$(''+b.dataset.page).classList.add('active');
 });
 
-render();
+function showModal(title,text,yes){
+ pending=yes;$('modalTitle').textContent=title;$('modalText').textContent=text;
+ $('modal').style.display='flex';
+}
+function closeModal(){$('modal').style.display='none';pending=null}
+$('cancelBtn').onclick=closeModal;
+$('confirmBtn').onclick=()=>{if(pending)pending();closeModal()};
+
+$('startTrade').onclick=()=>{
+ let entry=Number($('entry').value),setup=$('setup').value;
+ if(!entry||entry<=0){alert('Enter a valid entry price.');return}
+ if(!setup){alert('Select your setup confirmation.');return}
+ let r=getRules(),direction=$('direction').value,sign=direction==='LONG'?1:-1;
+ let trade={id:Date.now(),number:todayTrades().length+1,direction,entry,
+ slPoints:r.sl,tpPoints:r.tp,sl:entry-sign*r.sl,tp:entry+sign*r.tp,
+ setup,start:new Date().toISOString()};
+ showModal('Confirm Trade '+trade.number,
+ `${direction} ETHUSD at ${fmt(entry)}. SL: ${fmt(trade.sl)} (${r.sl} points). TP: ${fmt(trade.tp)} (${r.tp} points). Confirm that you have placed the trade on Delta Exchange.`,
+ ()=>{
+  data.active=trade;save();update();
+  notify('Trade '+trade.number+' started',`${direction} ETHUSD. SL ${fmt(trade.sl)} | TP ${fmt(trade.tp)}.`);
+  startReminders();
+  document.querySelector('[data-page="home"]').click();
+ });
+};
+
+function renderActive(){
+ let t=data.active;
+ if(!t){$('activeCard').innerHTML='<div class="empty">No active trade. Start a trade after checking your setup.</div>';stopReminders();return}
+ $('activeCard').innerHTML=`
+ <div style="display:flex;justify-content:space-between;gap:8px">
+ <strong>${t.direction} · TRADE ${t.number}</strong><span class="pill">OPEN</span></div>
+ <div class="price-box">
+ <div><small>ENTRY</small><strong>${fmt(t.entry)}</strong></div>
+ <div><small>STOP LOSS</small><strong class="red">${fmt(t.sl)}</strong></div>
+ <div><small>TARGET</small><strong class="green">${fmt(t.tp)}</strong></div>
+ </div>
+ <p class="note">SL ${t.slPoints} points · TP ${t.tpPoints} points · ${t.setup}</p>
+ <div class="field"><label>Actual exit price</label><input id="exitPrice" type="number" step="0.01" placeholder="Enter exit price"></div>
+ <div class="btn-row">
+ <button class="btn btn-green" onclick="closeTrade('WIN')">Close Profit</button>
+ <button class="btn btn-red" onclick="closeTrade('LOSS')">Close Loss</button>
+ <button class="btn btn-dark" onclick="closeTrade('BE')">Break Even</button>
+ </div>`;
+}
+window.closeTrade=function(result){
+ let t=data.active;if(!t)return;
+ let exit=Number($('exitPrice')?.value);
+ if(!exit||exit<=0){alert('Enter the actual exit price first.');return}
+ let raw=(exit-t.entry)*(t.direction==='LONG'?1:-1);
+ let pts=result==='BE'?0:raw;
+ if(result==='WIN'&&pts<=0){alert('Exit price does not show a profit.');return}
+ if(result==='LOSS'&&pts>=0){alert('Exit price does not show a loss.');return}
+ showModal('Close trade?',`Record ${result} with ${pts>0?'+':''}${fmt(pts)} points?`,()=>{
+  let finished={...t,exit,result,points:pts,closed:new Date().toISOString()};
+  data.today.push(finished);data.history.push(finished);data.active=null;save();update();
+  stopReminders();notify('Trade closed',`${result}: ${pts>0?'+':''}${fmt(pts)} points.`);
+ });
+};
+
+function renderJournal(){
+ let arr=[...data.today].reverse();
+ $('journalList').innerHTML=arr.length?arr.map(t=>`
+ <div class="trade-row">
+ <div><strong>${t.direction} · #${t.number}</strong><br>
+ <span class="note">${new Date(t.start).toLocaleTimeString()} · Entry ${fmt(t.entry)} · Exit ${fmt(t.exit)}</span></div>
+ <div style="text-align:right"><strong class="${t.points>0?'green':t.points<0?'red':''}">${t.points>0?'+':''}${fmt(t.points)} pts</strong><br><span class="note">${t.result}</span></div>
+ </div>`).join(''):'<div class="empty">No trades recorded yet.</div>';
+}
+function notify(title,body){
+ if('Notification'in window&&Notification.permission==='granted'){
+  new Notification(title,{body,icon:'app-icon.svg'});
+ }
+}
+$('notifyBtn').onclick=async()=>{
+ if(!('Notification'in window)){alert('Notifications are not supported in this browser.');return}
+ let p=await Notification.requestPermission();
+ alert(p==='granted'?'Notifications enabled.':'Notification permission not granted.');
+};
+function startReminders(){
+ stopReminders();
+ let mins=Number(data.settings.reminder)||1;
+ reminderTimer=setInterval(()=>{
+  if(data.active)notify('ETH Pulse reminder','Your ETHUSD trade is still open. Check your SL, TP and exchange position.');
+ },mins*60*1000);
+}
+function stopReminders(){if(reminderTimer){clearInterval(reminderTimer);reminderTimer=null}}
+$('saveSettings').onclick=()=>{
+ data.settings.reminder=Number($('reminderInterval').value);save();
+ if(data.active)startReminders();alert('Settings saved.');
+};
+$('reminderInterval').value=data.settings.reminder;
+
+$('exportBtn').onclick=()=>{
+ let rows=[['Trade','Direction','Entry','Exit','SL','TP','Result','Points','Date']];
+ data.history.forEach(t=>rows.push([t.number,t.direction,t.entry,t.exit,t.sl,t.tp,t.result,t.points,t.start]));
+ let csv=rows.map(r=>r.join(',')).join('\n');
+ let a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));
+ a.download='eth-pulse-journal.csv';a.click();URL.revokeObjectURL(a.href);
+};
+$('clearJournal').onclick=()=>{
+ if(confirm('Clear all saved trade history?')){data.history=[];data.today=[];save();update()}
+};
+$('resetApp').onclick=()=>{
+ if(confirm('Reset all app data? This cannot be undone.')){
+  localStorage.removeItem(storeKey);location.reload();
+ }
+};
+if(data.active)startReminders();
+calcPrices();update();save();
 </script>
 </body>
 </html>
